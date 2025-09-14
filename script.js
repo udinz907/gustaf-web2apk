@@ -5,7 +5,7 @@
             
             // Default credentials
             const validUsername = 'admin';
-            const validPassword = 'password123';
+            const validPassword = '999';
             
             // Check if user is already logged in
             if (localStorage.getItem('isLoggedIn') === 'true') {
@@ -29,7 +29,7 @@
                     loginModal.style.display = 'none';
                     mainContent.style.display = 'block';
                 } else {
-                    alert('Username atau password salah! Silakan coba lagi.\n\nDefault: admin / password123');
+                    alert('Username atau password salah! Silakan coba lagi.\n\nBUY AKSES: t.me/adhityagustaf22');
                 }
             });
         });
