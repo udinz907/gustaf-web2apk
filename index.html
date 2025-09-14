@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppMaker - Buat Aplikasi Web dengan Mudah</title>
+    <link id="icon" rel="icon" href="https://qu.ax/HoLdd.jpg" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --accent-light: #b5179e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --dark-alt: #343a40;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-bg: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --platinum: #E5E4E2;
+        }
+
+        .dark-mode {
+            --primary: #4895ef;
+            --primary-light: #4361ee;
+            --secondary: #560bad;
+            --accent: #b5179e;
+            --accent-light: #7209b7;
+            --light: #121212;
+            --dark: #f8f9fa;
+            --dark-alt: #e9ecef;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #adb5bd;
+            --light-gray: #2d2d2d;
+            --card-bg: #1e1e1e;
+            --text-primary: #f8f9fa;
+            --text-secondary: #e9ecef;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --platinum: #E5E4E2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--gold));
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Main Content (initially hidden) */
+        .main-content {
+            display: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: var(--accent-light);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-light);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--accent-light);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .theme-switch {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+        }
+
+        .theme-switch:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: var(--accent-light);
+        }
+
+        .btn:hover:after {
+            left: 100%;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .app-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: -80px auto 5rem;
+            box-shadow: var(--shadow);
+            max-width: 1000px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .app-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--gold));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--primary);
+            font-size: 2.2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .color-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 12px;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .file-upload {
+            position: relative;
+            border: 2px dashed var(--light-gray);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .preview {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .preview img {
+            max-width: 120px;
+            max-height: 120px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .features {
+            padding: 6rem 0;
+            background: var(--light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--primary);
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--gold));
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 0 auto 2rem;
+            transform: rotate(0deg);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotate(10deg);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1.2rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .progress-container {
+            display: none;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--light-gray);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .result {
+            display: none;
+            margin-top: 3rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .result.success {
+            border-left: 5px solid var(--success);
+        }
+
+        .result.error {
+            border-left: 5px solid var(--warning);
+        }
+
+        .download-btn {
+            margin: 1rem 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            background: var(--primary);
+        }
+
+        .key-info {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .key-info h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .key-info p {
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 0;
+            background: var(--light);
+        }
+
+        .about-content {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .stat h3 {
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat p {
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .about-image {
+            flex: 0.8;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        footer {
+            background: var(--dark-alt);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.8rem;
+            color: var(--accent-light);
+            font-size: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.8rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--accent-light);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 4rem 0;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+            .btn {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+            .btn-outline {
+                margin-left: 0;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+            nav ul {
+                gap: 1.2rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .app-form {
+                padding: 2rem;
+                margin: -40px auto 3rem;
+            }
+            .form-title {
+                font-size: 1.8rem;
+            }
+            .form-control, .color-picker {
+                font-size: 0.9rem;
+            }
+            .file-upload {
+                padding: 1.5rem;
+            }
+            .preview img {
+                max-width: 80px;
+                max-height: 80px;
+            }
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about-image {
+                margin-top: 2rem;
+            }
+            .about-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animated {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <div class="login-logo">
+                <i class="fas fa-mobile-alt"></i>
+                <h2>Gustaf Web2Apk</h2>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="login-btn">Masuk</button>
+            </form>
+            <div class="login-footer">
+                <p>BUY AKSES : t.me/adhityagustaf22</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (initially hidden) -->
+    <div class="main-content" id="mainContent">
+        <div id="particles-js"></div>
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Gustaf Web2Apk</span>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="#create">Buat App</a></li>
+                            <li><a href="#features">Fitur</a></li>
+                            <li><a href="#about">Tentang</a></li>
+                        </ul>
+                    </nav>
+                    <div class="theme-switch" id="themeSwitch">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container hero-content">
+                <h1 class="animated">Buat Aplikasi Web Anda dengan Mudah</h1>
+                <p class="animated delay-1">Ubah website menjadi aplikasi Android dalam hitungan menit tanpa coding. Gratis dan mudah digunakan.</p>
+                <a href="#create" class="btn animated delay-2">Buat Sekarang</a>
+                <a href="#features" class="btn btn-outline animated delay-3">Pelajari Lebih Lanjut</a>
+            </div>
+        </section>
+
+        <div class="container">
+            <section id="create" class="app-form">
+                <h2 class="form-title">Buat Aplikasi Baru</h2>
+                <form id="appForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="url">URL Website</label>
+                            <input type="url" class="form-control" id="url" placeholder="https://website-anda.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="email@anda.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appName">Nama Aplikasi</label>
+                            <input type="text" class="form-control" id="appName" placeholder="Nama Aplikasi Saya" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="packageName">Nama Package (com.nama.aplikasi)</label>
+                            <input type="text" class="form-control" id="packageName" placeholder="com.nama.aplikasi" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Warna Toolbar</label>
+                            <div class="color-group">
+                                <input type="color" class="color-picker" id="toolbarColor" value="#03A9F4">
+                                <input type="text" class="form-control" id="toolbarColorText" value="#03A9F4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Warna Judul Toolbar</label>
+                            <div class="color-group">
+                                <input type="color" class="color-picker" id="toolbarTitleColor" value="#FFFFFF">
+                                <input type="text" class="form-control" id="toolbarTitleColorText" value="#FFFFFF">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="appIcon">Icon Aplikasi (PNG, max 500KB)</label>
+                            <div class="file-upload" id="appIconUpload">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Klik untuk upload icon aplikasi</p>
+                                <input type="file" id="appIcon" accept="image/png" required>
+                            </div>
+                            <div class="preview">
+                                <img id="appIconPreview" src="#" alt="Preview Icon" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="splashIcon">Splash Screen Icon (PNG, max 500KB)</label>
+                            <div class="file-upload" id="splashIconUpload">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Klik untuk upload splash screen</p>
+                                <input type="file" id="splashIcon" accept="image/png" required>
+                            </div>
+                            <div class="preview">
+                                <img id="splashIconPreview" src="#" alt="Preview Splash" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="enableShowToolBar" checked>
+                                <span class="checkmark"></span>
+                                Tampilkan Toolbar
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn submit-btn">Buat Aplikasi Sekarang</button>
+                </form>
+                <div id="progressContainer" class="progress-container">
+                    <h3>Membuat aplikasi...</h3>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <p id="progressText">Mempersiapkan...</p>
+                </div>
+                <div id="result" class="result"></div>
+            </section>
+        </div>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Fitur Unggulan</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Proses Cepat</h3>
+                        <p>Ubah website menjadi aplikasi Android hanya dalam hitungan menit tanpa proses yang rumit.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3>Kustomisasi Mudah</h3>
+                        <p>Atur icon, warna, dan tampilan aplikasi sesuai dengan brand Anda dengan mudah.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Responsif</h3>
+                        <p>Aplikasi yang dihasilkan akan bekerja dengan baik di semua perangkat Android.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Download Langsung</h3>
+                        <p>Dapatkan file APK dan AAB langsung untuk diinstall atau upload ke Play Store.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Keamanan Terjamin</h3>
+                        <p>Semua data dan proses pembuatan aplikasi dilakukan dengan aman dan terenkripsi.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Tanpa Coding</h3>
+                        <p>Tidak perlu pengetahuan teknis atau coding untuk membuat aplikasi Android.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">Tentang Gustaf Web2Apk</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>gustaf tools web2apk adalah platform inovatif yang memungkinkan Anda mengubah website menjadi aplikasi Android dengan cepat dan mudah, tanpa perlu keahlian coding. Kami percaya bahwa setiap orang berhak memiliki aplikasi mobile untuk bisnis atau proyek pribadi mereka.</p>
+                        <p>Dengan antarmuka yang ramah pengguna dan fitur kustomisasi yang fleksibel, gustaf web2apk membantu Anda menciptakan aplikasi yang sesuai dengan identitas brand Anda. Kami berkomitmen untuk memberikan pengalaman yang aman, cepat, dan terjangkau.</p>
+                        <div class="about-stats">
+                            <div class="stat">
+                                <h3>99K+</h3>
+                                <p>Aplikasi Dibuat</p>
+                            </div>
+                            <div class="stat">
+                                <h3>100%</h3>
+                                <p>Kepuasan Pengguna</p>
+                            </div>
+                            <div class="stat">
+                                <h3>24/7</h3>
+                                <p>Dukungan</p>
+                            </div>
+                        </div>
+                        <a href="#create" class="btn">Coba Sekarang</a>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://i.imghippo.com/files/vc3693glE.jpg" alt="GUSTAF HOSTING DEV">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Gustaf Web2Apk</h3>
+                        <p>Platform mudah untuk mengubah website menjadi aplikasi Android tanpa coding.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Link Cepat</h3>
+                        <ul>
+                            <li><a href="#create">Buat App</a></li>
+                            <li><a href="#features">Fitur</a></li>
+                            <li><a href="#about">Tentang</a></li>
+                            <li><a href="#">Kebijakan Privasi</a></li>
+                            <li><a href="#">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Kontak</h3>
+                        <p><i class="fas fa-envelope"></i> gustafhosting@gmail.com</p>
+                        <p><i class="fab fa-whatsapp"></i> +62895392249321</p>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>&copy; 2025 Gustaf Web2Apk. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+<script src="script.js" defer></script>
+</body>
+</html>
